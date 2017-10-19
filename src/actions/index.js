@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const ROOT_URL = 'https://www.divvydose.com/pharmacy';
+const ROOT_URL = 'http://httpbin.org/post ';
 
-export function createPost(values, callback) {
+export function createPerscription(values, callback) {
   const request = axios.post(ROOT_URL, values);
   return {
     type: 'CREATE_POST',
