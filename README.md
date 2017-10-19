@@ -14,13 +14,9 @@ npm start
 Then open [http://localhost:3000/](http://localhost:3000/) to see the app.<br>
 To deploy to production, create a minified bundle with `npm run build`.
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
 ## Built With
 
-* [Create React App](https://github.com/facebookincubator/create-react-app) 
+* [Create React App](https://github.com/facebookincubator/create-react-app)
 
 ## License
 
