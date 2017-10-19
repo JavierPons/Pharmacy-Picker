@@ -6,7 +6,7 @@ import './NavBar.css';
 const NavBar = () => (
   <div className="topnav " id="myTopnav">
     <Link to="/">Perciption Filler</Link>
-    <Link to="/perscriptions/new">Get Started</Link>
+    <Link to="/pharmacy/new">Get Started</Link>
   </div>
 );
 
