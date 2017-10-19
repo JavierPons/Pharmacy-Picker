@@ -1,0 +1,20 @@
+header.head {
+  text-align: center;
+  color: #fff;
+}
+header.head .header-content {
+  padding: 150px 15px 100px;
+}
+header.head .header-content .header-content-inner h1 {
+  font-size: 30px;
+  font-weight: 700;
+}
+header.head .header-content .header-content-inner hr {
+  margin: 30px auto;
+}
+header.head .header-content .header-content-inner p {
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 50px;
+  color: rgba(255, 255, 255, 0.7);
+}
