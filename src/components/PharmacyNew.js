@@ -47,6 +47,48 @@ class PharmacyNew extends Component {
   }
 }
 
+function validate(values) {
+  const errors = {};
+  if (!values.firstName) {
+    errors.firstName = 'First Name must not be left blank.';
+  }
+
+  if (!values.lastName) {
+    errors.lastName = 'Last Name must not be left blank.';
+  }
+
+  if (!values.address) {
+    errors.address = 'Address must not be left blank.';
+  }
+
+  if (!values.city) {
+    errors.city = 'City must not be left blank.';
+  }
+
+  errors.zipcode = validZip(values.zipcode);
+  errors.state = validState(values.state);
+
+  return errors;
+}
+
+function validZip(zipcode) {
+  const isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipcode);
+
+  return isValidZip ? null : 'Please provide a valid zipcode.';
+}
+
+function validState(state) {
+  const stateRegex = new RegExp(
+    '(^(A[LKSZRAEP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$)',
+    'i'
+  );
+
+  const isValidState = stateRegex.test(state);
+
+  return isValidState ? null : 'Please provide a valid two letter state abbreviation.';
+}
+
 export default reduxForm({
+  validate,
   form: 'PharmacyNewForm'
 })(connect(null, { createPerscription })(PharmacyNew));
