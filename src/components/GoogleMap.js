@@ -1,13 +1,17 @@
 /*global google*/
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { selectPharmacy } from '../actions';
+
 import './GoogleMap.css';
+
 class GoogleMap extends Component {
   componentDidMount() {
-    this.codeAddress('8246 s sacramento chicago');
+    this.codeAddress('new york');
   }
 
-  codeAddress(address) {
-    let geocoder, map;
+  codeAddress = address => {
+    let geocoder, map, pharmacy;
 
     geocoder = new google.maps.Geocoder();
     geocoder.geocode(
@@ -30,13 +34,36 @@ class GoogleMap extends Component {
             position: userOrigin
           });
 
-          google.maps.event.addListener(marker, 'click', function() {
+          google.maps.event.addListener(marker, 'click', () => {
             infowindow.setContent('Me');
-            infowindow.open(map, this);
+            infowindow.open(map, marker);
           });
 
-          let infowindow = new google.maps.InfoWindow();
-          var service = new google.maps.places.PlacesService(map);
+          const infowindow = new google.maps.InfoWindow();
+          const service = new google.maps.places.PlacesService(map);
+
+          const callback = (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              for (let i = 0; i < results.length; i++) {
+                createMarker(results[i]);
+              }
+            }
+          };
+
+          const createMarker = place => {
+            const marker = new google.maps.Marker({
+              map: map,
+              icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+              position: place.geometry.location
+            });
+
+            google.maps.event.addListener(marker, 'click', () => {
+              infowindow.setContent(place.name);
+              infowindow.open(map, marker);
+              pharmacy = `${place.name}, ${place.vicinity}`;
+              this.props.selectPharmacy(pharmacy);
+            });
+          };
 
           service.nearbySearch(
             {
@@ -46,35 +73,25 @@ class GoogleMap extends Component {
             },
             callback
           );
-
-          function callback(results, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-              for (var i = 0; i < results.length; i++) {
-                createMarker(results[i]);
-              }
-            }
-          }
-
-          function createMarker(place) {
-            var marker = new google.maps.Marker({
-              map: map,
-              icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-              position: place.geometry.location
-            });
-
-            google.maps.event.addListener(marker, 'click', function() {
-              infowindow.setContent(place.name);
-              infowindow.open(map, this);
-            });
-          }
         }
       }
     );
-  }
+  };
 
   render() {
-    return <div ref="map" className="google-map container" />;
+    if (this.props.address) {
+      let address = `
+        ${this.props.address.streetAddress || ''} ${this.props.address.city || ''} ${this.props.address.state || ''}
+        `;
+      this.codeAddress(address);
+    }
+
+    return (
+      <div>
+        <div ref="map" className="google-map container" />
+      </div>
+    );
   }
 }
 
-export default GoogleMap;
+export default connect(null, { selectPharmacy })(GoogleMap);
