@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, getFormValues } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createPerscription } from '../actions';
@@ -27,6 +27,7 @@ class PharmacyNew extends Component {
 
   render() {
     const { handleSubmit } = this.props;
+    console.log(this.props.values);
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <Field label="First Name" name="firstName" component={this.renderField} />
@@ -88,7 +89,11 @@ function validState(state) {
   return isValidState ? null : 'Please provide a valid two letter state abbreviation.';
 }
 
+const mapStateToProps = state => {
+  return { values: getFormValues('PharmacyNewForm')(state) };
+};
+
 export default reduxForm({
   validate,
   form: 'PharmacyNewForm'
-})(connect(null, { createPerscription })(PharmacyNew));
+})(connect(mapStateToProps, { createPerscription })(PharmacyNew));
