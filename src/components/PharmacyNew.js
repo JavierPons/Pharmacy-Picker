@@ -20,23 +20,26 @@ class PharmacyNew extends Component {
     );
   }
 
+  renderMap = field => {
+    return <GoogleMap address={field.address} field={field} />;
+  };
+
   onSubmit = values => {
-    this.props.createPerscription(values);
+    this.props.createPerscription({ ...values, pharmacy: this.props.pharmacies });
     this.props.history.push('/');
   };
 
   render() {
     const { handleSubmit } = this.props;
-    console.log(this.props.values);
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <Field label="First Name" name="firstName" component={this.renderField} />
         <Field label="Last Name" name="lastName" component={this.renderField} />
-        <Field label="Address" name="address" component={this.renderField} />
+        <Field label="Street Address" name="streetAddress" component={this.renderField} />
         <Field label="City" name="city" component={this.renderField} />
         <Field label="State" name="state" component={this.renderField} />
         <Field label="Zipcode" name="zipcode" component={this.renderField} />
-        <GoogleMap />
+        <Field name="pharmacy" address={this.props.values} component={this.renderMap} />
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
@@ -90,7 +93,7 @@ function validState(state) {
 }
 
 const mapStateToProps = state => {
-  return { values: getFormValues('PharmacyNewForm')(state) };
+  return { values: getFormValues('PharmacyNewForm')(state), pharmacies: state.pharmacies };
 };
 
 export default reduxForm({
