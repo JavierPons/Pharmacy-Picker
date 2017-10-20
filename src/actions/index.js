@@ -9,3 +9,10 @@ export function createPerscription(values) {
     payload: request
   };
 }
+
+export function selectPharmacy(selectedPharmacy) {
+  return {
+    type: 'SELECT_PHARMACY',
+    payload: selectedPharmacy
+  };
+}
