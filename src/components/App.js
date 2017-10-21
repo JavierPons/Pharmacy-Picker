@@ -11,6 +11,8 @@ import PharmacyNew from '../containers/PharmacyNew';
 
 import './App.css';
 
+// configure react promis middleware to handle
+// response from post to api in reducers
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 const App = () => (

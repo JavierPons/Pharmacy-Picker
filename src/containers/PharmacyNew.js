@@ -10,12 +10,17 @@ import './PharmacyNew.css';
 class PharmacyNew extends Component {
   componentDidUpdate(nextProps) {
     if (this.props.pharmacies !== nextProps.pharmacies) {
+      // when the component updates if pharmacies has been updated
+      // change the value of its form input to the new value
       this.props.change('pharmacy', this.props.pharmacies);
     }
   }
   renderField(field) {
+    // renders an input component for the field component to track
     const { meta: { touched, error } } = field;
     const className = `form-group ${touched && error ? 'has-danger' : ''}`;
+    // I would test that this component gets the right className depending on
+    // valid and invalid input for each Field
     return (
       <div className={className}>
         <label>{field.label}</label>
@@ -26,14 +31,21 @@ class PharmacyNew extends Component {
   }
 
   onSubmit = values => {
+    // when the form submits call the action creator that posts
+    // a perscriprions info to the api.
+    // pop the user back to the homepage
     this.props.createPerscription(values);
+    // I would test that values actually contians all expected feilds
     this.props.history.push('/');
   };
 
   getAddress() {
+    // if this.props exists create an address string that will be used
+    // by the Google map component to update the maps current origin
     if (this.props.values) {
+      const { streetAddress, city, state } = this.props.values;
       return `
-        ${this.props.values.streetAddress || ''} ${this.props.values.city || ''} ${this.props.values.state || ''}
+        ${streetAddress || ''} ${city || ''} ${state || ''}
         `;
     } else {
       return '';
@@ -41,6 +53,8 @@ class PharmacyNew extends Component {
   }
 
   render() {
+    // the google map component is renderd outside of a field so it
+    // doesnt re render when the pharmacy property is updated
     const { handleSubmit } = this.props;
     return (
       <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -66,6 +80,8 @@ class PharmacyNew extends Component {
 }
 
 function validate(values) {
+  // validations for the forms values
+  // I would test that the erros get passed to the errors object correctly
   const errors = {};
   if (!values.firstName) {
     errors.firstName = 'First Name must not be left blank.';
@@ -95,12 +111,18 @@ function validate(values) {
 }
 
 const validZip = zipcode => {
+  // if regex finds a valid zipcode return null
+  // else return an error so the form can notify the user
+  // I would test that this method performs as expected with valid and invalid input
   const isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipcode);
 
   return isValidZip ? null : 'Please provide a valid zipcode.';
 };
 
 function validState(state) {
+  // if regex finds a valid state abbreviation return null
+  // else return an error so the form can notify the user
+  // I would test that this method performs as expected with valid and invalid input
   const stateRegex = new RegExp(
     '(^(A[LKSZRAEP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$)',
     'i'

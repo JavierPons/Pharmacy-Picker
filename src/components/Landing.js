@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './Landing.css';
 
 const Landing = () => (
+  //landing page jumbotron component
   <div>
     <header className="head">
       <div className="header-content">
