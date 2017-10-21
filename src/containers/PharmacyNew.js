@@ -51,7 +51,7 @@ class PharmacyNew extends Component {
         <Field label="State" name="state" component={this.renderField} />
         <Field label="Zipcode" name="zipcode" component={this.renderField} />
         <GoogleMap address={this.getAddress()} />
-        <Field label="Selected Pharmacy" name="pharmacy" component={this.renderField} />
+        <Field label="Click A Pharmacy Above" name="pharmacy" component={this.renderField} />
         <div />
 
         <button type="submit" className="btn btn-primary">
@@ -85,7 +85,7 @@ function validate(values) {
 
   if (!values.pharmacy) {
     errors.pharmacy =
-      'Pharmacy must not be left blank. Please select a pharmacy on the map above or enter your perfered stores name and address.';
+      "Pharmacy must not be left blank. Please select a pharmacy on the map above or enter your perfered store's name and address.";
   }
 
   errors.zipcode = validZip(values.zipcode);

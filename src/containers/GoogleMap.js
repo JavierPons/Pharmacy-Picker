@@ -30,7 +30,7 @@ class GoogleMap extends Component {
 
           const marker = new google.maps.Marker({
             map: map,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+            icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
             position: userOrigin
           });
 
@@ -53,7 +53,7 @@ class GoogleMap extends Component {
           const createMarker = place => {
             const marker = new google.maps.Marker({
               map: map,
-              icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+              icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
               position: place.geometry.location
             });
 

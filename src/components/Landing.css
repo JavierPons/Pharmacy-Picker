@@ -3,7 +3,7 @@ header.head {
   color: #fff;
 }
 header.head .header-content {
-  padding: 150px 15px 100px;
+  padding: 100px 15px 100px;
 }
 header.head .header-content .header-content-inner h1 {
   font-size: 30px;
@@ -17,4 +17,11 @@ header.head .header-content .header-content-inner p {
   font-weight: 300;
   margin-bottom: 50px;
   color: rgba(255, 255, 255, 0.7);
+}
+img {
+  max-width: 200px;
+}
+hr {
+  width: 200px;
+  border: 1px solid #2aadb7;
 }
