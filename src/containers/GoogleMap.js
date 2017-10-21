@@ -9,7 +9,7 @@ class GoogleMap extends Component {
   componentDidMount() {
     // since no user info is selected on mount
     // I set an initial google map location to divvyDOSE's HQ in Rock Island :)
-    this.codeAddress('Rock Island');
+    this.codeAddress('3416 46th Ave #104, Rock Island, IL 61201');
   }
 
   codeAddress = address => {
