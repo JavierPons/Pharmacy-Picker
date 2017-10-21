@@ -9,14 +9,12 @@ class GoogleMap extends Component {
   componentDidMount() {
     // since no user info is selected on mount
     // I set an initial google map location to divvyDOSE's HQ in Rock Island :)
-    this.codeAddress('3416 46th Ave #104, Rock Island, IL 61201');
+    this.renderMap('3416 46th Ave #104, Rock Island, IL 61201');
   }
 
-  codeAddress = address => {
+  renderMap = address => {
     // renders a google map based on a users passed in location
-    let geocoder, map;
-
-    geocoder = new google.maps.Geocoder();
+    const geocoder = new google.maps.Geocoder();
     geocoder.geocode(
       // returns a users lat lon based on an address passsed in
       {
@@ -25,13 +23,7 @@ class GoogleMap extends Component {
       (results, status) => {
         if (status === google.maps.GeocoderStatus.OK) {
           const userOrigin = results[0].geometry.location;
-          const myOptions = {
-            zoom: 10,
-            center: userOrigin,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-          // create map with location from geocode
-          map = new google.maps.Map(this.refs.map, myOptions);
+          const map = this.createMap(userOrigin);
 
           const marker = new google.maps.Marker({
             //create the users marker
@@ -95,10 +87,20 @@ class GoogleMap extends Component {
     );
   };
 
+  createMap(userOrigin) {
+    const myOptions = {
+      zoom: 10,
+      center: userOrigin,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    // create map with location from geocode
+    return new google.maps.Map(this.refs.map, myOptions);
+  }
+
   render() {
     // render the map in the below component when the
     // user updates streetaddress city or state
-    this.codeAddress(this.props.address);
+    this.renderMap(this.props.address);
     return <div ref="map" className="google-map container" />;
   }
 }
