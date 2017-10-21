@@ -7,7 +7,7 @@ import './GoogleMap.css';
 
 class GoogleMap extends Component {
   componentDidMount() {
-    this.codeAddress('new york');
+    this.codeAddress('Rock Island');
   }
 
   codeAddress = address => {
@@ -79,18 +79,10 @@ class GoogleMap extends Component {
   };
 
   render() {
-    if (this.props.address) {
-      let address = `
-        ${this.props.address.streetAddress || ''} ${this.props.address.city || ''} ${this.props.address.state || ''}
-        `;
-      this.codeAddress(address);
-    }
-
-    return (
-      <div>
-        <div ref="map" className="google-map container" />
-      </div>
-    );
+    // if (this.props.address) {
+    this.codeAddress(this.props.address);
+    // }
+    return <div ref="map" className="google-map container" />;
   }
 }
 

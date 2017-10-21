@@ -4,30 +4,41 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createPerscription } from '../actions';
 
-import GoogleMap from '../components/GoogleMap';
+import GoogleMap from './GoogleMap';
 import './PharmacyNew.css';
 
 class PharmacyNew extends Component {
+  componentDidUpdate(nextProps) {
+    if (this.props.pharmacies !== nextProps.pharmacies) {
+      this.props.change('pharmacy', this.props.pharmacies);
+    }
+  }
   renderField(field) {
     const { meta: { touched, error } } = field;
     const className = `form-group ${touched && error ? 'has-danger' : ''}`;
     return (
       <div className={className}>
-        <label id="test">{field.label}</label>
+        <label>{field.label}</label>
         <input className="form-control" type="text" {...field.input} />
         <div className="text-help">{touched ? error : ''}</div>
       </div>
     );
   }
 
-  renderMap = field => {
-    return <GoogleMap address={field.address} field={field} />;
-  };
-
   onSubmit = values => {
-    this.props.createPerscription({ ...values, pharmacy: this.props.pharmacies });
+    this.props.createPerscription(values);
     this.props.history.push('/');
   };
+
+  getAddress() {
+    if (this.props.values) {
+      return `
+        ${this.props.values.streetAddress || ''} ${this.props.values.city || ''} ${this.props.values.state || ''}
+        `;
+    } else {
+      return '';
+    }
+  }
 
   render() {
     const { handleSubmit } = this.props;
@@ -39,7 +50,10 @@ class PharmacyNew extends Component {
         <Field label="City" name="city" component={this.renderField} />
         <Field label="State" name="state" component={this.renderField} />
         <Field label="Zipcode" name="zipcode" component={this.renderField} />
-        <Field name="pharmacy" address={this.props.values} component={this.renderMap} />
+        <GoogleMap address={this.getAddress()} />
+        <Field label="Selected Pharmacy" name="pharmacy" component={this.renderField} />
+        <div />
+
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
@@ -61,12 +75,17 @@ function validate(values) {
     errors.lastName = 'Last Name must not be left blank.';
   }
 
-  if (!values.address) {
-    errors.address = 'Address must not be left blank.';
+  if (!values.streetAddress) {
+    errors.streetAddress = 'Street Address must not be left blank.';
   }
 
   if (!values.city) {
     errors.city = 'City must not be left blank.';
+  }
+
+  if (!values.pharmacy) {
+    errors.pharmacy =
+      'Pharmacy must not be left blank. Please select a pharmacy on the map above or enter your perfered stores name and address.';
   }
 
   errors.zipcode = validZip(values.zipcode);
@@ -75,11 +94,11 @@ function validate(values) {
   return errors;
 }
 
-function validZip(zipcode) {
+const validZip = zipcode => {
   const isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipcode);
 
   return isValidZip ? null : 'Please provide a valid zipcode.';
-}
+};
 
 function validState(state) {
   const stateRegex = new RegExp(
