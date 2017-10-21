@@ -16,7 +16,7 @@ class GoogleMap extends Component {
     // renders a google map based on a users passed in location
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode(
-      // returns a users lat lon based on an address passsed in
+      // provides a users lat lon based on an address passsed in
       {
         address: address
       },
@@ -25,54 +25,32 @@ class GoogleMap extends Component {
           const userOrigin = results[0].geometry.location;
           const map = this.createMap(userOrigin);
 
-          const marker = new google.maps.Marker({
-            //create the users marker
-            map: map,
-            icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-            position: userOrigin
-          });
-
-          google.maps.event.addListener(marker, 'click', () => {
-            // when user click its own marker they see a tag that says 'me'
-            infowindow.setContent('Me');
-            infowindow.open(map, marker);
-          });
-
-          // setup google places to find pharmacies nearby
+          // creates infowindow for clicked pins info to be shown
           const infowindow = new google.maps.InfoWindow();
-          const service = new google.maps.places.PlacesService(map);
+
+          // drop a marker for the users position
+          this.dropMarker(map, userOrigin, infowindow, 'Me', 'https://maps.google.com/mapfiles/ms/icons/green-dot.png');
 
           const mapPlaces = (results, status) => {
             // callback that loops over all phamacies in range and places a marker down for them.
             if (status === google.maps.places.PlacesServiceStatus.OK) {
               for (let i = 0; i < results.length; i++) {
-                createMarker(results[i]);
+                const place = results[i];
+                this.dropMarker(
+                  map,
+                  place.geometry.location,
+                  infowindow,
+                  place.name,
+                  'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                  this.props.selectPharmacy,
+                  `${place.name}, ${place.vicinity}`
+                );
               }
             }
           };
 
-          const createMarker = place => {
-            // creates a marker for a pharmacy and adds a listener
-            // that shows the pharmacys name and calls an action
-            // creator that emits the address to the pharmacy new component
-            const marker = new google.maps.Marker({
-              map: map,
-              icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-              position: place.geometry.location
-            });
-
-            google.maps.event.addListener(marker, 'click', () => {
-              infowindow.setContent(place.name);
-              infowindow.open(map, marker);
-              dispatchPharmacySelected(`${place.name}, ${place.vicinity}`);
-            });
-          };
-
-          const dispatchPharmacySelected = pharmacy => {
-            // dispatches the selectPharmacy method with the newly clicked pharmacy
-            this.props.selectPharmacy(pharmacy);
-          };
-
+          // setup google places to find pharmacies nearby
+          const service = new google.maps.places.PlacesService(map);
           service.nearbySearch(
             // finds phamacies within a 10 mile (16093 m) radius and plots them on the map
             {
@@ -86,6 +64,31 @@ class GoogleMap extends Component {
       }
     );
   };
+
+  dropMarker(map, origin, infowindow, content, icon, dispatchPharmacy = null, pharmacy = null) {
+    const marker = this.makeMarker(map, origin, icon);
+    this.addMarkerClickEvent(map, marker, infowindow, content, dispatchPharmacy, pharmacy);
+  }
+
+  makeMarker(map, origin, icon) {
+    return new google.maps.Marker({
+      //create the users marker
+      map: map,
+      icon: icon,
+      position: origin
+    });
+  }
+
+  addMarkerClickEvent(map, marker, infowindow, content, dispatchPharmacy = null, pharmacy = null) {
+    google.maps.event.addListener(marker, 'click', () => {
+      // when user click its own marker they see a tag that says 'me'
+      infowindow.setContent(content);
+      infowindow.open(map, marker);
+      if (dispatchPharmacy) {
+        dispatchPharmacy(pharmacy);
+      }
+    });
+  }
 
   createMap(userOrigin) {
     const myOptions = {
