@@ -7,7 +7,7 @@ import reducers from '../reducers';
 
 import NavBar from './NavBar';
 import Landing from './Landing';
-import PharmacyNew from './PharmacyNew';
+import PharmacyNew from '../containers/PharmacyNew';
 
 import './App.css';
 
