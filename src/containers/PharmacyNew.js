@@ -67,7 +67,6 @@ class PharmacyNew extends Component {
         <GoogleMap address={this.getAddress()} />
         <Field label="Click A Pharmacy Above" name="pharmacy" component={this.renderField} />
         <div />
-
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
@@ -119,7 +118,7 @@ const validZip = zipcode => {
   return isValidZip ? null : 'Please provide a valid zipcode.';
 };
 
-function validState(state) {
+const validState = state => {
   // if regex finds a valid state abbreviation return null
   // else return an error so the form can notify the user
   // I would test that this method performs as expected with valid and invalid input
@@ -131,7 +130,7 @@ function validState(state) {
   const isValidState = stateRegex.test(state);
 
   return isValidState ? null : 'Please provide a valid two letter state abbreviation.';
-}
+};
 
 const mapStateToProps = state => {
   return { values: getFormValues('PharmacyNewForm')(state), pharmacies: state.pharmacies };
