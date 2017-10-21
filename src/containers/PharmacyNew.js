@@ -67,7 +67,6 @@ class PharmacyNew extends Component {
         <GoogleMap address={this.getAddress()} />
         <Field label="Click A Pharmacy Above" name="pharmacy" component={this.renderField} />
         <div />
-
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
