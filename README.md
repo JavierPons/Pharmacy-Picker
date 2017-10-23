@@ -1,6 +1,6 @@
 # Pharmacy Picker
 
-A React pharmacy picker web app that posts to an mock external API. See the app in action [live on heroku here](https://pharmacy-picker.herokuapp.com/pharmacy/new).
+A React pharmacy picker web app that posts to an mock external API. See the app in action [live on heroku here](https://pharmacy-picker.herokuapp.com/).
 
 ## Getting Started
 
